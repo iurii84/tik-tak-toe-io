@@ -1,10 +1,13 @@
 package com.example.tiktaktoeio;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+
+import java.io.IOException;
 
 public class MenuController {
     public TextField namePlayerOneField;
@@ -13,6 +16,7 @@ public class MenuController {
     public Label playerOneLabel;
     public Label playerTwoLabel;
     public Pane playerTwoPane;
+    public ChoiceBox<String> fieldSizeChoiceBox;
 
     private String selectedPlayer = "player";
     private String playerOneName;
@@ -20,16 +24,25 @@ public class MenuController {
     public Pane menuPane;
     @FXML
     private ChoiceBox<String> playWithChoiceBox;
+    private int fieldSizeSelected;
+    private mainControllerInterface mainController;
+
+    public void initialize() {
+        initializeChoiceBoxPlayWith();
+        initializeNameFields();
+        initializeChoiceBoxFieldSize();
+    }
+
+    public void setMainController(mainControllerInterface mainController) {
+        this.mainController = mainController;
+    }
 
     public String getSelectedPlayer() {
         return selectedPlayer;
     }
 
-    public void initialize() {
-        initializeChoiceBoxPlayWith();
-        initializeNameFields();
-
-
+    public int getFieldSize() {
+        return this.fieldSizeSelected;
     }
 
     private void initializeChoiceBoxPlayWith() {
@@ -38,9 +51,26 @@ public class MenuController {
 
         initPlayerLabels();
 
-        playWithChoiceBox.setOnAction((event) -> {
+        playWithChoiceBox.setOnAction((_) -> {
             onChoiceBoxPlayWithSelected();
         });
+    }
+
+    private void initializeChoiceBoxFieldSize() {
+        fieldSizeChoiceBox.getItems().addAll("3 X 3", "4 X 4", "5 X 5");
+        fieldSizeChoiceBox.setValue("3 X 3");
+
+        fieldSizeChoiceBox.setOnAction((_) -> {
+            onChoiceBoxFieldSizeSelected();
+        });
+    }
+
+    private void onChoiceBoxFieldSizeSelected() {
+        fieldSizeSelected = fieldSizeChoiceBox.getSelectionModel().getSelectedIndex() + 3;
+        if (mainController != null) {
+            mainController.setBoardSize(fieldSizeSelected);
+            mainController.resetGridPane();
+        }
     }
 
     private void onChoiceBoxPlayWithSelected() {
@@ -66,11 +96,11 @@ public class MenuController {
     }
 
     private void initializeNameFields() {
-        namePlayerOneField.setOnAction((event) -> {
+        namePlayerOneField.setOnAction((_) -> {
             onInputPlayerOneField();
         });
 
-        namePlayerTwoField.setOnAction((event) -> {
+        namePlayerTwoField.setOnAction((_) -> {
             onInputPlayerTwoField();
         });
 
@@ -88,5 +118,15 @@ public class MenuController {
         namePlayerTwoField.setDisable(true);
 
         System.out.println(STR."Player 2: \{playerOneName}");
+    }
+
+    public void deactivateChoiceBoxFieldSize() {
+        System.out.println("deactivate");
+        fieldSizeChoiceBox.setDisable(true);
+    }
+
+    public void activateChoiceBoxFieldSize() {
+        System.out.println("activate");
+        fieldSizeChoiceBox.setDisable(false);
     }
 }

@@ -2,16 +2,20 @@
 
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
 <Pane fx:id="menuPane" prefHeight="400.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tiktaktoeio.MenuController">
-    <Label layoutX="15.0" layoutY="25.0" text="PLAY WITH:" />
-    <ChoiceBox fx:id="playWithChoiceBox" layoutX="15.0" layoutY="45.0" prefWidth="150.0" />
-    <Label fx:id="playerOneLabel" layoutX="15.0" layoutY="90.0" />
-    <TextField fx:id="namePlayerOneField" layoutX="15.0" layoutY="110.0" promptText="Hit ENTER when done" />
-    <Pane fx:id="playerTwoPane" layoutX="15.0" layoutY="150.0">
+   <Label layoutX="14.0" layoutY="25.0" text="Select Field Size" />
+   <ChoiceBox fx:id="fieldSizeChoiceBox" layoutX="14.0" layoutY="42.0" prefWidth="150.0" />
+    <Label layoutX="14.0" layoutY="81.0" text="PLAY WITH:" />
+    <ChoiceBox fx:id="playWithChoiceBox" layoutX="14.0" layoutY="101.0" prefWidth="150.0" />
+    <Label fx:id="playerOneLabel" layoutX="14.0" layoutY="146.0" />
+    <TextField fx:id="namePlayerOneField" layoutX="14.0" layoutY="166.0" promptText="Hit ENTER when done" />
+    <Pane fx:id="playerTwoPane" layoutX="14.0" layoutY="206.0">
         <Label fx:id="playerTwoLabel" />
         <TextField fx:id="namePlayerTwoField" layoutY="20.0" promptText="Hit ENTER when done" />
     </Pane>
+   <Separator layoutX="186.0" layoutY="1.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="6.0" />
 </Pane>
