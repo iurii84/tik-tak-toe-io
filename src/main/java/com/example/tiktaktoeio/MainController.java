@@ -23,6 +23,7 @@ public class MainController implements mainControllerInterface{
     private Game game;
     private CellStriker cellStriker;
     private MenuController menuController;
+    BaseStrategy strategy;
 
     @FXML
     void initialize() {
@@ -41,12 +42,33 @@ public class MainController implements mainControllerInterface{
 
     @FXML
     void onFieldBtnClick(Button button, int rowIndex, int columnIndex) {
+        System.out.println(STR."Row: \{rowIndex}, Col: \{columnIndex}");
         boolean moved = game.move(rowIndex, columnIndex);
         if (moved) {
             updateGameState();
             button.setText(String.valueOf(game.getCurrentPlayer()));
             game.switchPlayer();
+
+            // TODO if play with computer
+            int[] coordinate = game.computerMove();
+            if (coordinate != null) {
+                updateGameState();
+                Button btn = getButtonFromGridPane(gridPane,coordinate[0], coordinate[1]);
+                assert btn != null;
+                btn.setText(String.valueOf(game.getCurrentPlayer()));
+                game.switchPlayer();
+            }
         }
+    }
+
+    private Button getButtonFromGridPane(GridPane gridPane, int rowIndex, int colIndex) {
+        for (int i = 0; i < gridPane.getChildren().size(); i++) {
+            if (GridPane.getRowIndex(gridPane.getChildren().get(i)) == rowIndex
+                    && GridPane.getColumnIndex(gridPane.getChildren().get(i)) == colIndex) {
+                return (Button) gridPane.getChildren().get(i);
+            }
+        }
+        return null; // Button not found
     }
 
     @FXML
@@ -94,6 +116,7 @@ public class MainController implements mainControllerInterface{
         resetGridPane();
         this.cellStriker = new CellStriker(strikePan, boardSize);
         game = new Game(boardSize, this.cellStriker);
+        this.strategy = new EasyStrategy(game);
         this.gridPane = new GridPaneGenerator(boardSize, this).generateGridPane();
         anchorPane.getChildren().addFirst(gridPane);
         deactivateStartBtn();

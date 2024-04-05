@@ -7,6 +7,8 @@ public class Game {
     private final int boardSize;
     private int[][] winningCells;
     private final CellStriker cellStriker;
+    private final ComputerPlayer computerPlayer;
+    private final BaseStrategy strategy;
 
     public Game(int boardSize, CellStriker cellStriker) {
         this.boardSize = boardSize;
@@ -14,6 +16,8 @@ public class Game {
         this.board = new char[boardSize][boardSize];
         this.gameOver = false;
         this.currentPlayer = 'X';
+        this.strategy = new EasyStrategy(this);
+        this.computerPlayer = new ComputerPlayer(this, this.strategy);
     }
 
     public boolean move(int row, int col) {
@@ -31,6 +35,10 @@ public class Game {
         }
 
         return true;
+    }
+
+    public int[] computerMove() {
+        return computerPlayer.move();
     }
 
     private boolean isValidMove(int row, int col) {
@@ -86,5 +94,8 @@ public class Game {
 
     public void switchPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+    public char getOpponentPlayer() {
+        return currentPlayer == 'X' ? 'O' : 'X';
     }
 }
