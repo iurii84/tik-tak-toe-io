@@ -6,8 +6,8 @@
     import java.util.Objects;
 
     public class WinningVector {
-        List<int[]> vector;
-        List<Integer> usedVectorIndices;
+        private final List<int[]> vector;
+        private final List<Integer> usedVectorIndices;
 
         public WinningVector() {
             this.vector = new ArrayList<>();
@@ -65,6 +65,7 @@
         public int hashCode() {
             return Objects.hash(vector);
         }
+
         @Override
         public String toString() {
             StringBuilder stringBuilder = new StringBuilder("Vector: ");

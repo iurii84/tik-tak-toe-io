@@ -3,9 +3,8 @@ package com.example.tiktaktoeio;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class BaseStrategy {
-    private final Game game;
-
+public abstract class BaseStrategy {
+    public final Game game;
     private final List<WinningVector> winningVectorPool;
 
     public BaseStrategy(Game game) {
@@ -13,12 +12,12 @@ abstract public class BaseStrategy {
         this.winningVectorPool = new ArrayList<>();
     }
 
-    abstract WinningVector selectVector();
-    abstract public int selectVectorIndex(WinningVector vector);
+    abstract public int[] getCoordinate();
 
+    // Find available vectors where player can make a move to win
     public List<WinningVector> findAvailableVectors() {
-        char opponentPlayer = this.game.getOpponentPlayer();
-        char[][] gameField = this.game.getBoard();
+        char opponentPlayer = game.getOpponentPlayer();
+        char[][] gameField = game.getBoard();
 
         List<WinningVector> availableVectors = new ArrayList<>();
 
@@ -60,6 +59,7 @@ abstract public class BaseStrategy {
         for (int i = 0; i < colsCount; i++) {
             if (gameField[i][i] == opponentPlayer) {
                 freeMainDiagonal = false;
+
                 break;
             }
             mainDiagonalVector.setCoordinate(new int[]{i, i});
@@ -74,6 +74,7 @@ abstract public class BaseStrategy {
         for (int i = 0; i < colsCount; i++) {
             if (gameField[i][colsCount - 1 - i] == opponentPlayer) {
                 freeAntiDiagonal = false;
+
                 break;
             }
             antiDiagonalVector.setCoordinate(new int[]{i, colsCount - 1 - i});
@@ -85,6 +86,7 @@ abstract public class BaseStrategy {
         return availableVectors;
     }
 
+    // Find the first available cell to make a move
     public int[] findFirstAvailableCell() {
         char[][] board = game.getBoard();
 
@@ -97,17 +99,22 @@ abstract public class BaseStrategy {
             }
         }
 
-        return null;
+        return null; // No available cell
     }
 
-    public void setWinningVector(WinningVector winningVector) {
+    // Add a winning vector to the pool
+    public void addWinningVector(WinningVector winningVector) {
         this.winningVectorPool.add(winningVector);
     }
+
+    // Get a winning vector from the pool
     public WinningVector getWinningVector(WinningVector existingWinningVector) {
         if (existingWinningVector != null && winningVectorPool.contains(existingWinningVector)) {
+
             return winningVectorPool.get(winningVectorPool.indexOf(existingWinningVector));
         } else {
-            this.setWinningVector(existingWinningVector);
+            addWinningVector(existingWinningVector);
+
             return existingWinningVector;
         }
     }
